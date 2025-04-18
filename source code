@@ -1,0 +1,85 @@
+DATA SEGMENT
+    PORTA EQU 00H
+    PORTB EQU 02H
+    PORTC EQU 04H
+    PORT_CON EQU 06H
+DATA ENDS
+
+CODE SEGMENT
+    ASSUME CS:CODE, DS:DATA
+    
+    ORG 0400H ; Starting address for the code segment
+
+START:
+    MOV AX, DATA
+    MOV DS, AX
+    
+    MOV DX, PORT_CON
+    MOV AL, 10000010B
+    OUT DX, AL
+    
+    MOV AL, 11000000B
+    MOV DX, PORTA
+    OUT DX, AL    
+    MOV AL, 11000000B
+    MOV DX, PORTC
+    OUT DX, AL    
+JMP XX 
+
+XX:
+    MOV DX, PORTB
+    IN AL, DX 
+    CMP AL, 0001B         ; Check DIP switch input
+    JZ AYESHA
+    IN AL, DX
+    CMP AL, 0010B         ; Check DIP switch input
+    JZ MICHELLE
+    IN AL, DX
+    CMP AL, 0100B         ; Check DIP switch input
+    JZ SABRINA                
+    IN AL, DX
+    CMP AL, 1000B         ; Check DIP switch input
+    JZ AMNA       
+JMP XX
+
+Person A:
+    MOV AL, 10000000B
+    MOV DX, PORTA        ; Prepare PORTA for output to 7-segment display
+    OUT DX, AL           ; Display number 8
+    MOV AL, 10010010B
+    MOV DX, PORTC        ; Prepare PORTC for output to 7-segment display
+    OUT DX, AL           ; Display number 5
+JMP XX
+    
+Person B:
+    MOV AL, 10000000B
+    MOV DX, PORTA        ; Prepare PORTA for output to 7-segment display
+    OUT DX, AL           ; Display number 8
+    MOV AL, 11111000B
+    MOV DX, PORTC        ; Prepare PORTC for output to 7-segment display
+    OUT DX, AL           ; Display number 7
+JMP XX
+    
+Person C:
+    MOV AL, 10010010B
+    MOV DX, PORTA        ; Prepare PORTA for output to 7-segment display
+    OUT DX, AL           ; Display number 5
+    MOV AL, 10011001B
+    MOV DX, PORTC        ; Prepare PORTC for output to 7-segment display
+    OUT DX, AL           ; Display number 4
+JMP XX
+    
+Person D:
+    MOV AL, 10000010B
+    MOV DX, PORTA        ; Prepare PORTA for output to 7-segment display
+    OUT DX, AL           ; Display number 6
+    MOV AL, 11000000B
+    MOV DX, PORTC        ; Prepare PORTC for output to 7-segment display
+    OUT DX, AL           ; Display number 0
+JMP XX
+
+JMP START
+
+CODE ENDS
+
+END START
